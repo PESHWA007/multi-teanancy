@@ -1,0 +1,16 @@
+# values.yaml
+image:
+  repository: <your-repo>/<app-name>
+  tag: latest
+
+db:
+  username: <your-db-username>
+  password: <your-db-password>
+
+token: <your-token>
+
+environment: dev
+
+resources:
+  cpu: 100m
+  memory: 128Mi

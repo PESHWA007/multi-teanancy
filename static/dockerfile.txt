@@ -1,0 +1,32 @@
+# Stage 1: Build stage
+FROM node:14 as builder
+
+# Set working directory
+WORKDIR /app
+
+# Copy package.json and install dependencies
+COPY package*.json ./
+RUN npm install
+
+# Copy HTML pages and assets
+COPY index.html ./     # Assuming index.html is your HTML page
+COPY assets/ ./assets  # Assuming assets directory contains CSS, JavaScript, images, etc.
+
+# Build any assets if needed (e.g., compile SCSS to CSS)
+# RUN npm run build
+
+# Stage 2: Production stage
+FROM nginx:alpine as production
+
+# Copy HTML pages and assets from the builder stage
+COPY --from=builder /app/index.html /usr/share/nginx/html/index.html
+COPY --from=builder /app/assets/ /usr/share/nginx/html/assets/
+
+# Optionally, copy nginx configuration if needed
+# COPY nginx.conf /etc/nginx/nginx.conf
+
+# Expose port
+EXPOSE 80
+
+# Command to start nginx
+CMD ["nginx", "-g", "daemon off;"]
